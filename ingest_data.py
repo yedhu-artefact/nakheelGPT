@@ -4,6 +4,7 @@ from langchain.embeddings import OpenAIEmbeddings
 import pickle
 import os
 from langchain.vectorstores import Chroma
+persist_directory = 'db'
 
 def embed_doc():
     #check data folder is not empty
