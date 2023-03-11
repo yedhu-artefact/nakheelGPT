@@ -4,6 +4,6 @@ chromadb
 streamlit
 streamlit-chat
 streamlit-authenticator
+streamlit-option-menu
 unstructured
 Wikipedia-API
-streamlit-option-menu

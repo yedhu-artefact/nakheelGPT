@@ -88,7 +88,7 @@ im_icon = Image.open('content/nakheel_icon.png')
 st.set_page_config(page_title="NakheelGPT", page_icon=im_icon)
 
 embeddings = OpenAIEmbeddings()
-vectorstore = Chroma(persist_directory="db/", embedding_function=embeddings)        
+vectorstore = Chroma(persist_directory="db/", embedding=embeddings)        
 print("Loaded vectorstore...")
 chain = get_chain(vectorstore)
 
