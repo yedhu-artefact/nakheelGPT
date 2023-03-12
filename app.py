@@ -20,7 +20,6 @@ wiki_wiki = wikipediaapi.Wikipedia(
         extract_format=wikipediaapi.ExtractFormat.WIKI
 )
 
-
 def wiki_search(topic):
     page_py = wiki_wiki.page(topic)
     title = page_py.title
@@ -83,15 +82,23 @@ def encrypt_password():
 
     return config
 
+@st.cache_resource
+def load_vector_index():
+    embeddings = OpenAIEmbeddings()
+    vectorstore = Chroma(persist_directory="db/", embedding_function=embeddings)        
+    print("Loaded vectorstore...")
+    # chain = get_chain(vectorstore)
+    return vectorstore
+
+
 # From here down is all the StreamLit UI.
 im_icon = Image.open('content/nakheel_icon.png')
 st.set_page_config(page_title="NakheelGPT", page_icon=im_icon)
-
-embeddings = OpenAIEmbeddings()
-vectorstore = Chroma(persist_directory="db/", embedding_function=embeddings)        
-print("Loaded vectorstore...")
-chain = get_chain(vectorstore)
-
+# embeddings = OpenAIEmbeddings()
+# vectorstore = Chroma(persist_directory="db/", embedding_function=embeddings)        
+# print("Loaded vectorstore...")
+# chain = get_chain(vectorstore)
+print("###1")
 # Authentication Setup
 config = encrypt_password()
 
@@ -104,7 +111,7 @@ authenticator = stauth.Authenticate(
 )
 
 name, authentication_status, username = authenticator.login("Login", "main")
-
+print("###2")
 
 hide_default_format = """
        <style>
@@ -114,6 +121,9 @@ hide_default_format = """
        """
 
 if authentication_status:
+    vectorstore = load_vector_index()
+    chain = get_chain(vectorstore)
+    print("###2.5")
     st.markdown(hide_default_format, unsafe_allow_html=True)
     st.title("NakheelGPT")
     st.caption("Next-Gen ChatBot built on top of the state of the art AI model - ChatGPT.")
@@ -141,12 +151,16 @@ if authentication_status:
     elif selected == "Settings":
         st.markdown("### Still building this page, come back later... 🛠️")
     else:
+        print("###3")
         if "generated" not in st.session_state:
             st.session_state["generated"] = []
+            intro ="Hi! I'm NakheelGPT. I'm here to give you insights on the voice of the customers. How can I help?"
+            st.session_state.generated.append(intro) 
 
         if "past" not in st.session_state:
             st.session_state["past"] = []
 
+        print("###4")
         st.markdown("Are you interested in these topics? Click to add their wiki articles to my knowledge base  🧠")
 
         # PART 2 ADDED: BUTTONS FOR WIKI ARTICLES
@@ -158,6 +172,7 @@ if authentication_status:
                 if len(topics) >= 3: 
                     print(topics)
                     if col1.button(topics[0],use_container_width=True):
+                        print("###5")
                         wiki_search(topics[0])
                         rebuild_index()
                     if col2.button(topics[1],use_container_width=True):
@@ -166,20 +181,25 @@ if authentication_status:
                     if col3.button(topics[2],use_container_width=True):
                         wiki_search(topics[2])
                         rebuild_index()
+        print("###5")
 
-        st.markdown("#")          
+        st.markdown("#")      
+        st.sidebar.markdown("***")
+        im_logo = Image.open("content/nakheel_logo.png")
+        st.sidebar.image(im_logo, use_column_width='auto') 
+        print(st.session_state)
         st.text_input("**Chat with NakheelGPT:**", value="",  key="input", on_change=generate_answer)
+        # message(intro, key="intro", avatar_style="bottts", seed="nakheel")
 
+        print("###6")
         if st.session_state["generated"]:
-
             for i in range(len(st.session_state["generated"]) - 1, -1, -1):
-                
                 message(st.session_state["generated"][i], key=str(i), avatar_style="bottts", seed="nakheel")
-                message(st.session_state["past"][i], is_user=True, key=str(i) + "_user", avatar_style="initials", seed=initials)
+                if (i-1)!=-1:
+                    message(st.session_state["past"][i-1], is_user=True, key=str(i) + "_user", avatar_style="initials", seed=initials)
     
-    st.sidebar.markdown("***")
-    im_logo = Image.open("content/nakheel_logo.png")
-    st.sidebar.image(im_logo, use_column_width='auto')
+        print("###7")
+
 elif authentication_status is False:
     st.error('Username/password is incorrect')
 elif authentication_status is None:
