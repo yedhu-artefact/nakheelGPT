@@ -155,3 +155,7 @@ WARNING:root:Collection langchain already exists, Do you have the right embeddin
 DEBUG:Chroma:Index not found
 DEBUG:Chroma:Index saved to {self._save_folder}/index.bin
 DEBUG:Chroma:Index saved to {self._save_folder}/index.bin
+DEBUG:Chroma:Logger created
+DEBUG:Chroma:Index not found
+DEBUG:Chroma:Index saved to db/index/index.bin
+DEBUG:Chroma:Index saved to db/index/index.bin
