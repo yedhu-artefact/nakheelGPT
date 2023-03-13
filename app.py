@@ -31,6 +31,7 @@ def wiki_search(topic):
     if title not in os.listdir("data"):
         with open(f"data/{title}.txt", "w") as f:
             f.write(text)
+    rebuild_index(text)
 
 
 def generate_answer():
@@ -60,9 +61,9 @@ def generate_answer():
     print(st.session_state.generated)
 
 
-def rebuild_index():
+def rebuild_index(texts):
     with st.spinner('Cramming documents... Hold on! This may take a while...'):
-        embed_doc()
+        embed_doc(texts, default_mode=False)
         print("Loading vectorstore...")
         chain = get_chain(vectorstore)
 

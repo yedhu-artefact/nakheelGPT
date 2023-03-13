@@ -10,14 +10,13 @@ Chat History:
 Follow Up Input: {question}
 Standalone question:"""
 CONDENSE_QUESTION_PROMPT = PromptTemplate.from_template(_template)
-prefix_messages = [{"role": "system", "content": "You are 'NakheelGPT', an AI assistant that answers questions in a concise manner."}]
+prefix_messages = [{"role": "system", "content": "You are 'NakheelGPT', an AI assistant that answers questions related to Nakheel Malls"}]
 
 template = """
 You are given the following extracted parts of a long document and a question.
 At the end of your answer, add a newline and return a python list of up to three wikipedia topics which are related to the context and question leading with a "#" like this wihout mentioning anything else:
 #['topic1', 'topic2', 'topic3']
-
-If you don't know the answer, don't try to make up an answer.
+Provide detailed answers in bullet points whenever possible. If you don't know the answer, don't try to make up an answer.
 
 
 Question: {question}
