@@ -1,17 +1,26 @@
-# chat_with_data
+# NakheelGPT
 
- This app starts with the AI wikipedia article from data folder and you can chat about it.  
-You can add additional documents with the file uploader.  
-# App will also give gpt powered related topic suggestions to be downloaded fom wikipedia to talk about.  
-# You have to Vectorize when you add additonal wikipedia articles.   
+> This app is built to answers questions on what customers think about Nakheel Malls from google maps reviews.
+
+Additionally you can add more documents to the knowledge base using the file uploader.
+The app will also give GPT-powered related topics suggestions to be downloaded fom wikipedia to chat about.  
+
+You can run the app on your machine using the command: 
+`streamlit run app.py`
+
+You can view this app on the link:
+https://yedhu-artefact-nakheelgpt-app-mbzsq9.streamlit.app
+/
+
+## Architecture
+Front-End Interface is built using Streamlit
+Prompt Engineering was done using Langchain
+
+
+
+
    
-I have modified the prompt so it returns 3 suggested topics from the context and the conversation
-
-
-## Part 1 of how I built this: https://youtu.be/qUoybv7SadM
-## Part 2 of how I built this: https://youtu.be/I3McnSQ1YnQ
-## My AI assisted coding videos: https://www.youtube.com/@echohive  
-  
     
     
-![image](https://user-images.githubusercontent.com/122702381/217783777-97b1427e-5243-400e-8c49-bb20bbad214e.png)
+## App Interface
+![interface image](/content/app_interface.png "App Interface")
