@@ -36,29 +36,30 @@ def wiki_search(topic):
 
 def generate_answer():
     user_input = st.session_state.input
-    docs = vectorstore.similarity_search(user_input, k=20)
+    if user_input!='' and user_input!=' ':
+        docs = vectorstore.similarity_search(user_input, k=20)
 
-    print(len(docs))
-    # PART 2 ADDED: CALLBACK FOR TOKEN USAGE
-    with get_openai_callback() as cb:
-        output = chain.run(input=user_input, vectorstore = vectorstore, context=docs, chat_history = [], question= user_input, QA_PROMPT=QA_PROMPT, CONDENSE_QUESTION_PROMPT=CONDENSE_QUESTION_PROMPT, template=_template)
-        print(cb.total_tokens)
-    
+        print(len(docs))
+        # PART 2 ADDED: CALLBACK FOR TOKEN USAGE
+        with get_openai_callback() as cb:
+            output = chain.run(input=user_input, vectorstore = vectorstore, context=docs, chat_history = [], question= user_input, QA_PROMPT=QA_PROMPT, CONDENSE_QUESTION_PROMPT=CONDENSE_QUESTION_PROMPT, template=_template)
+            print(cb.total_tokens)
+        
 
-    st.session_state.past.append(user_input)
-    # print(st.session_state.past)
-    st.session_state.generated.append(output)
-    ##ADDED FOR TESTING
-    if "#" in st.session_state.generated[-1]:
-        st.session_state.generated[-1], st.session_state.topics = st.session_state.generated[-1].split("#")[0], st.session_state.generated[-1].split("#")[1]
-    
-    with open("topics.txt", "w") as f:
-        for char in st.session_state.topics:
-            if char == "[" or char == "]" or char == "'":
-                continue
-            else:
-                f.write(char)
-    print(st.session_state.generated)
+        st.session_state.past.append(user_input)
+        # print(st.session_state.past)
+        st.session_state.generated.append(output)
+        ##ADDED FOR TESTING
+        if "#" in st.session_state.generated[-1]:
+            st.session_state.generated[-1], st.session_state.topics = st.session_state.generated[-1].split("#")[0], st.session_state.generated[-1].split("#")[1]
+        
+        with open("topics.txt", "w") as f:
+            for char in st.session_state.topics:
+                if char == "[" or char == "]" or char == "'":
+                    continue
+                else:
+                    f.write(char)
+        print(st.session_state.generated)
 
 
 def rebuild_index(texts):
